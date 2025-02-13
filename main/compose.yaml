@@ -1,0 +1,38 @@
+name: test-app
+
+services:
+  gateway:
+    image: nginx:1.26-alpine-slim
+    ports:
+      - 80:80
+    networks:
+      - net1
+      - net2
+    volumes:
+      - ../gateway/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on: # รอ web1 web2 สร้างเสร็จก่อน ค่อย สร้าง gateway
+      - web1
+      - web2
+
+  web1:
+    # image: bosszaprodigy/test-docker-push:0.2.0
+    build:
+      context: ../app1/
+      dockerfile: Dockerfile.dev
+    # ports:
+    #   - 81:1412
+    networks:
+      - net1
+    volumes:
+      - ../app1/web/:/usr/share/nginx/html/
+
+  web2:
+    image: dockerteam96/test-docker:0.2.0
+    # ports:
+    #   - 82:8886
+    networks:
+      - net2
+
+networks:
+  net1: 
+  net2:

@@ -1,0 +1,15 @@
+FROM nginx:1.26-alpine-slim
+
+WORKDIR /usr/share/nginx/html/
+
+EXPOSE 1412/tcp
+# RUN apk update && apk --no-cache add curl && apk cache clean  19.5MB
+# RUN apk update && apk --no-cache add curl && rm -rf /var/cache/apk/*  17.1MB
+# RUN apk update && apk --no-cache add curl && rm -rf /etc/apk/cache/*  19.5MB
+
+RUN apk update \
+    && apk --no-cache add curl \
+    && rm -rf /var/cache/apk/*
+
+COPY ./nginx/conf.d/ /etc/nginx/conf.d/
+COPY ./web/ /usr/share/nginx/html/

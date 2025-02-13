@@ -1,0 +1,10 @@
+FROM nginx:1.26-alpine-slim
+
+WORKDIR /usr/share/nginx/html/
+
+COPY ./web .
+COPY nginx/conf.d/ /etc/nginx/conf.d
+
+EXPOSE 80/tcp
+
+WORKDIR ./web/

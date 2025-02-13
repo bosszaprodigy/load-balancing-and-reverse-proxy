@@ -1,0 +1,30 @@
+name: redis-app
+
+services:
+  redis:
+    image: redis:7.4-alpine
+    networks:
+      - redis-network
+    volumes:
+      - redis-data:/data/
+    command: redis-server --port 6000
+
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    networks:
+      - redis-network
+    ports:
+      - 4090:80 # Port สำหรับการเข้าถึง phpredisadmin
+    # environment:
+    #   - REDIS_1_HOST=redis
+    #   - REDIS_1_PORT=6000
+    env_file:
+      - ./.myenv
+    depends_on:
+      - redis
+
+networks:
+  redis-network: 
+
+volumes:
+  redis-data:
